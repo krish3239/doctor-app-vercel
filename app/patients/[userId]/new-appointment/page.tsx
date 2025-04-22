@@ -3,9 +3,9 @@ import Image from "next/image";
 import { AppointmentForm } from "@/components/forms/AppointmentForm";
 import { getPatient } from "@/lib/actions/patient.actions";
 
-const Appointment = async ({ params: { userId } }: SearchParamProps) => {
+const Appointment = async ({ params }: SearchParamProps) => {
+  const { userId } = await params; // Await params to resolve userId
   const patient = await getPatient(userId);
-
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
