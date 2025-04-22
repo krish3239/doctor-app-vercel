@@ -7,7 +7,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Form, FormControl } from "@/components/ui/form";
+import {  FormControl } from "@/components/ui/form";
+import { Form as CustomForm } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { SelectItem } from "@/components/ui/select";
@@ -98,7 +99,7 @@ const RegisterForm = ({ user }: { user: User }) => {
   };
 
   return (
-    <Form {...form}>
+    <CustomForm {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex-1 space-y-12"
@@ -164,7 +165,7 @@ const RegisterForm = ({ user }: { user: User }) => {
                   <RadioGroup
                     className="flex h-11 gap-6 xl:justify-between"
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    defaultValue={typeof field.value === "string" ? field.value : ""}
                   >
                     {GenderOptions.map((option, i) => (
                       <div key={option + i} className="radio-group">
@@ -340,7 +341,7 @@ const RegisterForm = ({ user }: { user: User }) => {
             label="Scanned Copy of Identification Document"
             renderSkeleton={(field) => (
               <FormControl>
-                <FileUploader files={field.value} onChange={field.onChange} />
+                <FileUploader files={field.value||File[]} onChange={field.onChange} />
               </FormControl>
             )}
           />
@@ -377,7 +378,7 @@ const RegisterForm = ({ user }: { user: User }) => {
 
         <SubmitButton isLoading={isLoading}>Submit and Continue</SubmitButton>
       </form>
-    </Form>
+    </CustomForm>
   );
 };
 
