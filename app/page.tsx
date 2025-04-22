@@ -4,7 +4,8 @@ import Link from "next/link";
 import { PatientForm } from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
 
-const Home = ({ searchParams }: SearchParamProps) => {
+const Home = async ({ searchParams }: SearchParamProps) => {
+  // Await params if needed for dynamic routes, but for this case, we only use searchParams
   const isAdmin = typeof searchParams?.admin === "string" && searchParams?.admin === "true";
 
   return (
