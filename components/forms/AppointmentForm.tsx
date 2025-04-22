@@ -44,9 +44,8 @@ export const AppointmentForm = ({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
       primaryPhysician: appointment ? appointment?.primaryPhysician : "",
-      schedule: appointment
-        ? new Date(appointment?.schedule!)
-        : new Date(Date.now()),
+      schedule: appointment?.schedule ? new Date(appointment.schedule) : new Date(),
+
       reason: appointment ? appointment.reason : "",
       note: appointment?.note || "",
       cancellationReason: appointment?.cancellationReason || "",
@@ -95,7 +94,7 @@ export const AppointmentForm = ({
 
         const appointmentToUpdate = {
             userId,
-            appointmentId: appointment?.$id!,
+            appointmentId: appointment?.$id ?? "",
             appointment: {
               primaryPhysician: values.primaryPhysician,
               schedule: new Date(values.schedule),
@@ -108,7 +107,9 @@ export const AppointmentForm = ({
         const updatedAppointment = await updateAppointment(appointmentToUpdate);
 
         if (updatedAppointment) {
-          setOpen && setOpen(false);
+          if (setOpen) {
+            setOpen(false);
+          }
           form.reset();
         }
       }
