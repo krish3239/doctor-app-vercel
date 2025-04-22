@@ -15,10 +15,10 @@ import { parseStringify } from "../utils";
 
 // CREATE APPWRITE USER
 export const createUser = async (user: CreateUserParams) => {
-  console.log("the appwrite")
+  console.log("the appwrite");
   try {
     // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
-    console.log("inside the action patient ")
+    console.log("inside the action patient ");
     const newuser = await users.create(
       ID.unique(),
       user.email,
@@ -26,22 +26,25 @@ export const createUser = async (user: CreateUserParams) => {
       undefined,
       user.name,
     );
-    console.log("after calling in action", newuser)
+    console.log("after calling in action", newuser);
 
     return parseStringify(newuser);
-  } catch (error: any) {
-    // Check existing user
-    if (error && error?.code === 409) {
-      const existingUser = await users.list([
-        Query.equal("email", [user.email]),
-      ]);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      // Handle known error types
+      console.error("An error occurred:", error.message);
+    } else {
+      // Handle unexpected error types
+      console.error("An unexpected error occurred:", error);
+    }
 
+    // Check existing user
+    if (error && (error as { code?: number })?.code === 409) {
+      const existingUser = await users.list([Query.equal("email", [user.email])]);
       return existingUser.users[0];
     }
-    console.error("An error occurred while creating a new user:", error);
   }
 };
-
 // GET USER
 export const getUser = async (userId: string) => {
   try {
