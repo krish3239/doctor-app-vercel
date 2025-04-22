@@ -2,7 +2,14 @@
 import { E164Number } from "libphonenumber-js/core";
 import Image from "next/image";
 import ReactDatePicker from "react-datepicker";
-import { Control } from "react-hook-form";
+
+import {
+  Control,
+  ControllerRenderProps,
+  FieldValues,
+  Path,
+} from "react-hook-form";
+
 import PhoneInput from "react-phone-number-input";
 
 import { Checkbox } from "@/components/ui/checkbox";
@@ -27,9 +34,9 @@ export enum FormFieldType {
   SKELETON = "skeleton",
 }
 
-interface CustomProps {
-  control: Control<any>;
-  name: string;
+interface CustomProps<T extends FieldValues = FieldValues> {
+  control: Control<T>;
+  name: Path<T>;
   label?: string;
   placeholder?: string;
   iconSrc?: string;
@@ -38,11 +45,17 @@ interface CustomProps {
   dateFormat?: string;
   showTimeSelect?: boolean;
   children?: React.ReactNode;
-  renderSkeleton?: (field: any) => React.ReactNode;
+  renderSkeleton?: (field: ControllerRenderProps<T, Path<T>>) => React.ReactNode;
   fieldType: FormFieldType;
 }
 
-const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
+const RenderInput = <T extends FieldValues>({
+  field,
+  props,
+}: {
+  field: ControllerRenderProps<T, Path<T>>;
+  props: CustomProps<T>;
+}) => {
   switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
@@ -148,8 +161,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
       return null;
   }
 };
-
-const CustomFormField = (props: CustomProps) => {
+const CustomFormField = <T extends FieldValues>(props: CustomProps<T>) => {
   const { control, name, label } = props;
 
   return (
@@ -162,7 +174,6 @@ const CustomFormField = (props: CustomProps) => {
             <FormLabel className="shad-input-label">{label}</FormLabel>
           )}
           <RenderInput field={field} props={props} />
-
           <FormMessage className="shad-error" />
         </FormItem>
       )}
