@@ -5,7 +5,7 @@ import { PatientForm } from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
 
 const Home = ({ searchParams }: SearchParamProps) => {
-  const isAdmin = searchParams?.admin === "true";
+  const isAdmin = typeof searchParams?.admin === "string" && searchParams?.admin === "true";
 
   return (
     <div className="flex h-screen max-h-screen">
